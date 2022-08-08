@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.uce.edu.demo.repository.modelo.DetalleFactura;
 import com.uce.edu.demo.repository.modelo.Factura;
 import com.uce.edu.demo.service.IFacturaService;
 
@@ -27,41 +28,28 @@ public class ProyectoU3PsApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
 
-		logJava.info("INNER JOIN");
-		List<Factura> listaFacturas = this.facturaService.buscarFacturaInnerJoin(10);
-		for (Factura item : listaFacturas) {
-			logJava.info("Numero: " + item.getNumero() + " " + "Fecha: " + item.getFecha());
-		}
+		
 
-		logJava.info("INNER JOIN sin WHERE");
-		List<Factura> listaFaturas2 = this.facturaService.buscarFacturaInnerJoin();
-		for (Factura item : listaFaturas2) {
-			logJava.info("Numero: " + item.getNumero() + " " + "Fecha: " + item.getFecha());
-		}
+		logJava.info("JOIN WHERE");
 
-		logJava.info("OUTER LEFT JOIN ");
-		List<Factura> listaFaturas3 = this.facturaService.buscarFacturaOuterJoinLeft(10);
-
-		for (Factura factura : listaFaturas3) {
+		List<Factura> listaFactura7 = this.facturaService.buscarFacturaJoinWhere(10);
+		for (Factura factura : listaFactura7) {
 			logJava.info("Numero: " + factura.getNumero() + " " + "Fecha: " + factura.getFecha());
+			for (DetalleFactura de : factura.getDetalles()) {
+				logJava.info("Detealles: " + de);
+			}
+
 		}
 
-		logJava.info("OUTER LEFT JOIN sin WHERE");
-		List<Factura> listaFactura4 = this.facturaService.buscarFacturaOuterJoinLeft();
-		for (Factura factura : listaFactura4) {
+		logJava.info("Fetch WHERE");
+		
+		List<Factura> listaFactura8 = this.facturaService.buscarFacturaJoinFetch(10);
+		for (Factura factura : listaFactura8) {
 			logJava.info("Numero: " + factura.getNumero() + " " + "Fecha: " + factura.getFecha());
-		}
+			for (DetalleFactura de : factura.getDetalles()) {
+				logJava.info("Detealles: " + de);
+			}
 
-		logJava.info("OUTER RIGHT JOIN");
-		List<Factura> listaFactura5 = this.facturaService.buscarFacturaOuterJoinRight(10);
-		for (Factura factura : listaFactura5) {
-			logJava.info("Numero: " + factura.getNumero() + " " + "Fecha: " + factura.getFecha());
-		}
-
-		logJava.info("OUTER RIGHT JOIN sin WHERE");
-		List<Factura> listaFactura6 = this.facturaService.buscarFacturaOuterJoinRight();
-		for (Factura factura : listaFactura6) {
-			logJava.info("Numero: " + factura.getNumero() + " " + "Fecha: " + factura.getFecha());
 		}
 
 	}

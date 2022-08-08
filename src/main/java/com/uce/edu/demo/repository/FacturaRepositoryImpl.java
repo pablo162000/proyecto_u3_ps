@@ -12,6 +12,8 @@ import org.springframework.stereotype.Repository;
 import com.uce.edu.demo.repository.modelo.Factura;
 import com.uce.edu.demo.repository.modelo.Hotel;
 
+import aj.org.objectweb.asm.Type;
+
 @Repository
 @Transactional
 public class FacturaRepositoryImpl implements IFacturaRepository {
@@ -72,13 +74,21 @@ public class FacturaRepositoryImpl implements IFacturaRepository {
 	@Override
 	public List<Factura> buscarFacturaJoinWhere(Integer cantidad) {
 		// TODO Auto-generated method stub
-		return null;
+		TypedQuery<Factura> myQuery = this.entityManager.createQuery(
+				"SELECT f FROM Factura f, DetalleFactura de WHERE f = de.factura AND de.cantidad =:cantidad",
+				Factura.class);
+		myQuery.setParameter("cantidad", cantidad);
+		return myQuery.getResultList();
 	}
 
 	@Override
 	public List<Factura> buscarFacturaJoinFetch(Integer cantidad) {
 		// TODO Auto-generated method stub
-		return null;
+		TypedQuery<Factura> myQuery = this.entityManager.createQuery(
+				"SELECT f FROM Factura f JOIN FETCH f.detalles de WHERE de.cantidad =:cantidad", Factura.class);
+		myQuery.setParameter("cantidad", cantidad);
+
+		return myQuery.getResultList();
 	}
 
 }

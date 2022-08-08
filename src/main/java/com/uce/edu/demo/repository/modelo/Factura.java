@@ -3,6 +3,7 @@ package com.uce.edu.demo.repository.modelo;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,22 +25,29 @@ public class Factura {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fact_id_seq")
 	@SequenceGenerator(name = "fact_id_seq", sequenceName = "fact_id_seq", allocationSize = 1)
 	private Integer id;
-	
+
 	@Column(name = "fact_fecha")
 	private LocalDateTime fecha;
-	
+
 	@Column(name = "fact_numero")
 	private String numero;
-	
-	@ManyToOne
-	@JoinColumn(name ="fact_clie_id")
-	private Cliente cliente;
-	
-	@OneToMany(mappedBy =  "factura",fetch = FetchType.EAGER)
-	private List<DetalleFactura> detalles;
 
+	@ManyToOne
+	@JoinColumn(name = "fact_clie_id")
+	private Cliente cliente;
+
+	@OneToMany(mappedBy = "factura", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<DetalleFactura> detalles;
 	
-	//SET Y GET
+	
+	
+
+	@Override
+	public String toString() {
+		return "Factura [id=" + id + ", fecha=" + fecha + ", numero=" + numero + ", cliente=" + cliente + "]";
+	}
+
+	// SET Y GET
 	public Integer getId() {
 		return id;
 	}
@@ -79,8 +87,5 @@ public class Factura {
 	public void setDetalles(List<DetalleFactura> detalles) {
 		this.detalles = detalles;
 	}
-	
-	
-	
 
 }

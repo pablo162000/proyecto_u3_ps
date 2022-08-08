@@ -58,7 +58,7 @@ public class FacturaServiceImpl implements IFacturaService{
 	@Override
 	public List<Factura> buscarFacturaJoinFetch(Integer cantidad) {
 		// TODO Auto-generated method stub
-		return this.buscarFacturaJoinFetch(cantidad);
+		return this.iFacturaRepository.buscarFacturaJoinFetch(cantidad);
 	}
 
 }
