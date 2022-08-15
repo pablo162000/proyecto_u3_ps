@@ -54,4 +54,16 @@ public class HotelServiceImpl implements IHotelService {
 		return this.iHotelRepository.buscarHotelOuterJoinRight();
 	}
 
+	@Override
+	public void insertarHotel(Hotel hotel) {
+		// TODO Auto-generated method stub
+		this.iHotelRepository.insertarHotel(hotel);
+	}
+
+	@Override
+	public Hotel buscarHotel(Integer id) {
+		// TODO Auto-generated method stub
+		return this.iHotelRepository.buscarHotel(id);
+	}
+
 }

@@ -90,8 +90,10 @@ public class HotelRepositoryImpl implements IHotelRepository {
 	@Override
 	@Transactional(value = TxType.MANDATORY)
 	public List<Hotel> buscarHotelJoinFetch(String tipoHabitacion) {
-		
-		LOG.info("Transacción activa: " + org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive());		TypedQuery<Hotel> myQuery = this.entityManager.createQuery(
+
+		LOG.info("Transacción activa: " + org.springframework.transaction.support.TransactionSynchronizationManager
+				.isActualTransactionActive());
+		TypedQuery<Hotel> myQuery = this.entityManager.createQuery(
 				"SELECT h FROM Hotel h JOIN FETCH h.habitaciones ha WHERE ha.tipo = :tipoHabitacion", Hotel.class);
 		myQuery.setParameter("tipoHabitacion", tipoHabitacion);
 		return myQuery.getResultList();
@@ -100,6 +102,24 @@ public class HotelRepositoryImpl implements IHotelRepository {
 	@Override
 	public List<Hotel> buscarHotelOuterJoinRight() {
 		// TODO Auto-generated method stub
-		return null;
+		TypedQuery<Hotel> myQuery = this.entityManager.createQuery("SELECT h FROM Hotel h RIGHT JOIN h.habitaciones ha",
+				Hotel.class);
+		return myQuery.getResultList();
 	}
+
+	@Override
+	public void insertarHotel(Hotel hotel) {
+		// TODO Auto-generated method stub
+		
+		this.entityManager.persist(hotel);
+		
+	}
+
+	@Override
+	public Hotel buscarHotel(Integer id) {
+		// TODO Auto-generated method stub
+		return this.entityManager.find(Hotel.class, id);
+	}
+	
+	
 }
