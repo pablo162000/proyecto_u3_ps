@@ -56,10 +56,10 @@ public class ProyectoU3PsApplication implements CommandLineRunner {
 //			}
 //
 //		}
-		
-		this.iTransferenciaService.realizarTransferencia("1312121", "2233423", new BigDecimal(1));
-
-		this.iTransferenciaService.realizarTransferenciaFachada("1312121", "2233423", new BigDecimal(1));
+//		
+//		this.iTransferenciaService.realizarTransferencia("1312121", "2233423", new BigDecimal(1));
+//
+	this.iTransferenciaService.realizarTransferenciaFachada("1312121", "2233423", new BigDecimal(1));
 
 	}//commit
 
