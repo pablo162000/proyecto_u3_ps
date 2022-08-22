@@ -27,9 +27,20 @@ public class Producto {
 
 	@Column(name = "prod_precio")
 	private BigDecimal precio;
+	
+	@Column(name = "prod_stock")
+	private Integer stock;
+	
+	@Column(name = "prod_codigo_de_barras")
+	private String codigoBarras;
+	
+	
+	
 
 	@OneToMany(mappedBy = "producto")
 	private List<DetalleFactura> detalles;
+	
+	
 
 	
 	//SET Y GET
@@ -64,6 +75,26 @@ public class Producto {
 	public void setDetalles(List<DetalleFactura> detalles) {
 		this.detalles = detalles;
 	}
+
+	public Integer getStock() {
+		return stock;
+	}
+
+	public void setStock(Integer stock) {
+		this.stock = stock;
+	}
+
+	public String getCodigoBarras() {
+		return codigoBarras;
+	}
+
+	public void setCodigoBarras(String codigoBarras) {
+		this.codigoBarras = codigoBarras;
+	}
+	
+	
+
+
 	
 	
 	

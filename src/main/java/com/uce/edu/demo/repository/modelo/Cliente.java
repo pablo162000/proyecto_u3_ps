@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "cliente")
+
 public class Cliente {
 	@Id
 	@Column(name = "clie_id")
@@ -24,6 +25,9 @@ public class Cliente {
 	
 	@Column(name = "clie_numero_tarjeta")
 	private String numeroTarjeta;
+	
+//	@Column(name = "clie_cedula")
+//	private String cedula;
 	
 	@OneToOne
 	@JoinColumn(name = "clie_ciud_id")
@@ -65,7 +69,15 @@ public class Cliente {
 	public void setFactura(List<Factura> factura) {
 		this.factura = factura;
 	}
-	
+
+//	public String getCedula() {
+//		return cedula;
+//	}
+//
+//	public void setCedula(String cedula) {
+//		this.cedula = cedula;
+//	}
+//	
 	
 	
 

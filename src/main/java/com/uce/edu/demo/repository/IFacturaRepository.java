@@ -6,6 +6,8 @@ import com.uce.edu.demo.repository.modelo.Factura;
 
 public interface IFacturaRepository {
 	
+	public void insertaFactura(Factura factura);
+	
 	
 	public List<Factura> buscarFacturaInnerJoin(Integer cantidad);
 	public List<Factura> buscarFacturaInnerJoin();

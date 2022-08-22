@@ -1,6 +1,7 @@
 package com.uce.edu.demo;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -9,11 +10,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.uce.edu.demo.repository.ICuentaBancariaRepository;
-import com.uce.edu.demo.repository.modelo.DetalleFactura;
-import com.uce.edu.demo.repository.modelo.Factura;
+import com.uce.edu.demo.repository.IProductoRepository;
+import com.uce.edu.demo.repository.modelo.Ciudadano;
+import com.uce.edu.demo.repository.modelo.Cliente;
+import com.uce.edu.demo.repository.modelo.Producto;
+import com.uce.edu.demo.service.ICiudadanoService;
+import com.uce.edu.demo.service.ICompraService;
 import com.uce.edu.demo.service.IFacturaService;
-import com.uce.edu.demo.service.ITransferenciaService;
+import com.uce.edu.demo.service.IProductoService;
 
 @SpringBootApplication
 public class ProyectoU3PsApplication implements CommandLineRunner {
@@ -25,42 +29,54 @@ public class ProyectoU3PsApplication implements CommandLineRunner {
 	private static Logger logJava = Logger.getLogger(ProyectoU3PsApplication.class);
 
 	@Autowired
-	private IFacturaService facturaService;
+	private IProductoService iProductoService;
+	
 	@Autowired
-	private ITransferenciaService iTransferenciaService;
+	private ICiudadanoService iCiudadanoService;
+	
+	@Autowired
+	private IProductoRepository iProductoRepository;
+	
+	@Autowired
+	private ICompraService iCompraService;
 
 	@Override
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
 
+//		Producto producto = new Producto();
+//		producto.setNombre("Mantequilla");
+//		producto.setPrecio(new BigDecimal(5));
+//		producto.setStock(30);
+//		producto.setCodigoBarras("ududsni47");
+//	
+//		this.iProductoService.insertarProducto(producto);
+//		
+
+		Ciudadano ciudadano = new Ciudadano();
+		ciudadano.setApellido("Suntaxi");
+		ciudadano.setNombre("Pablo");
+		ciudadano.setCedula("172415768");
+		Cliente cliente = new Cliente();
+		cliente.setCiudadano(ciudadano);
+		cliente.setNumeroTarjeta("18182828");
+		ciudadano.setCliente(cliente);
+		
+		//this.iCiudadanoService.insertar(ciudadano);
+		
+		//this.iProductoRepository.buscarProducto("ududsni47");
+		
+		
+		
+		List<String> listacodigoBarra= new ArrayList<>();
+		listacodigoBarra.add("oss87ds48d");
+		listacodigoBarra.add("ududsni47");
 		
 
-//		logJava.info("JOIN WHERE");
-//
-//		List<Factura> listaFactura7 = this.facturaService.buscarFacturaJoinWhere(10);
-//		for (Factura factura : listaFactura7) {
-//			logJava.info("Numero: " + factura.getNumero() + " " + "Fecha: " + factura.getFecha());
-//			for (DetalleFactura de : factura.getDetalles()) {
-//				logJava.info("Detealles: " + de);
-//			}
-//
-//		}
+		this.iCompraService.realizarCompraDeProducto("172415768", "1", listacodigoBarra);
+		
+		
 
-//		logJava.info("JOIN FETCH");
-//		
-//		List<Factura> listaFactura8 = this.facturaService.buscarFacturaJoinFetch(10);
-//		for (Factura factura : listaFactura8) {
-//			logJava.info("Numero: " + factura.getNumero() + " " + "Fecha: " + factura.getFecha());
-//			for (DetalleFactura de : factura.getDetalles()) {
-//				logJava.info("Detealles: " + de);
-//			}
-//
-//		}
-//		
-//		this.iTransferenciaService.realizarTransferencia("1312121", "2233423", new BigDecimal(1));
-//
-	this.iTransferenciaService.realizarTransferenciaFachada("1312121", "2233423", new BigDecimal(1));
-
-	}//commit
+	}
 
 }
