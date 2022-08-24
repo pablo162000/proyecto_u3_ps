@@ -16,7 +16,7 @@ public class FacturaElectronicaRepositoryImpl implements IFacturaElectronicaRepo
 	@PersistenceContext
 	private EntityManager entityManager;
 	@Override
-	@Transactional(value= TxType.REQUIRES_NEW)
+	@Transactional(value= TxType.REQUIRED)
 	public void insertar(FacturaElectronica facturaElectronica) {
 		// TODO Auto-generated method stub
 		this.entityManager.persist(facturaElectronica);

@@ -33,21 +33,23 @@ public class CompraServiceImpl implements ICompraService {
 	private IClienteRepository iClienteRepository;
 	@Autowired
 	private IProductoRepository iProductoRepository;
-	
+
 	@Autowired
 	private IFacturaElectronicaRepository iFacturaElectronicaRepository;
 
+	List<DetalleFactura> listDetalleFacturas = new ArrayList<>();
+	Factura factura = new Factura();
+
 	@Override
-	@Transactional(value = TxType.REQUIRED)
-	public void realizarCompraDeProducto(String cedulaCliente, String numeroFactura, List<String> codigoBarras) {
+	@Transactional(value = TxType.REQUIRES_NEW)
+	public void crearFacturaYDetalles(String cedulaCliente, String numeroFactura, List<String> codigoBarras) {
 
 		Cliente cliente = this.iClienteRepository.buscarPorCedula(cedulaCliente);
-		Factura factura = new Factura();
 		factura.setCliente(cliente);
 		factura.setNumero(numeroFactura);
 		factura.setFecha(LocalDateTime.now());
 
-		List<DetalleFactura> listDetalleFacturas = new ArrayList<>();
+		// List<DetalleFactura> listDetalleFacturas = new ArrayList<>();
 
 		for (String codigo : codigoBarras) {
 			Producto producto = this.iProductoRepository.buscarProducto(codigo);
@@ -57,32 +59,45 @@ public class CompraServiceImpl implements ICompraService {
 			detalleFactura.setFactura(factura);
 			detalleFactura.setSubtotal(producto.getPrecio());
 			listDetalleFacturas.add(detalleFactura);
-			
-			Integer stocknuevo = producto.getStock()-1;
+
+			Integer stocknuevo = producto.getStock() - 1;
 			producto.setStock(stocknuevo);
 			this.iProductoRepository.actualizar(producto);
-			
+
 		}
 
 		factura.setDetalles(listDetalleFacturas);
-		
+
 		iFacturaRepository.insertaFactura(factura);
-		
-		
-		BigDecimal monto= new BigDecimal(0);
-		FacturaElectronica facturaElectronica = new  FacturaElectronica();
+
+	}
+
+	@Override
+	@Transactional(value = TxType.REQUIRES_NEW)
+
+	public void registrarSRI() {
+		// TODO Auto-generated method stub
+		BigDecimal monto = new BigDecimal(0);
+		FacturaElectronica facturaElectronica = new FacturaElectronica();
 		facturaElectronica.setFechaCreacion(LocalDateTime.now());
-		for(DetalleFactura detalle : listDetalleFacturas) {
-		monto =monto.add(detalle.getSubtotal());
-			
+		for (DetalleFactura detalle : listDetalleFacturas) {
+			monto = monto.add(detalle.getSubtotal());
+
 		}
-		
-		
 		facturaElectronica.setMonto(monto);
-		facturaElectronica.setNumero(numeroFactura);
+		facturaElectronica.setNumero(factura.getNumero());
 		facturaElectronica.setNumeroItems(listDetalleFacturas.size());
-		//inserta factura electronica
+		// inserta factura electronica
 		this.iFacturaElectronicaRepository.insertar(facturaElectronica);
+	}
+
+	@Override
+	@Transactional(value = TxType.REQUIRED)
+
+	public void realizarVenta(String cedulaCliente, String numeroFactura, List<String> codigoBarras) {
+		// TODO Auto-generated method stub
+		this.crearFacturaYDetalles(cedulaCliente, numeroFactura, codigoBarras);
+		this.registrarSRI();
 	}
 
 }

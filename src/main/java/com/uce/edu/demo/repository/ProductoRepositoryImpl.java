@@ -36,7 +36,7 @@ public class ProductoRepositoryImpl implements IProductoRepository {
 		return myQuery.getSingleResult();
 	}
 	
-	@Transactional(value = TxType.REQUIRED)
+	@Transactional(value = TxType.REQUIRES_NEW)
 
 	public void actualizar(Producto producto) {
 		this.entityManager.merge(producto);
