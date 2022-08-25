@@ -16,12 +16,11 @@ public class FacturaElectronicaRepositoryImpl implements IFacturaElectronicaRepo
 	@PersistenceContext
 	private EntityManager entityManager;
 	@Override
-	@Transactional(value= TxType.REQUIRED)
+	@Transactional(value= TxType.MANDATORY)
 	public void insertar(FacturaElectronica facturaElectronica) {
 		// TODO Auto-generated method stub
 		this.entityManager.persist(facturaElectronica);
 		
-		throw new RuntimeException();
 	}
 
 }

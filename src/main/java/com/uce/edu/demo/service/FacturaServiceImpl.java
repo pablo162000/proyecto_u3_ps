@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+import javax.transaction.Transactional.TxType;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -75,6 +78,7 @@ public class FacturaServiceImpl implements IFacturaService{
 	}
 
 	@Override
+	@Transactional(value = TxType.REQUIRES_NEW)
 	public BigDecimal procesarFactura(String cedulaCliente, String numeroFactura, List<String> codigoBarras) {
 		// TODO Auto-generated method stub
 		List<DetalleFactura> listDetalleFacturas = new ArrayList<>();
@@ -85,8 +89,7 @@ public class FacturaServiceImpl implements IFacturaService{
 		factura.setNumero(numeroFactura);
 		factura.setFecha(LocalDateTime.now());
 
-		// List<DetalleFactura> listDetalleFacturas = new ArrayList<>();
-		BigDecimal monto= new BigDecimal(0);
+		BigDecimal monto= BigDecimal.ZERO;
 		for (String codigo : codigoBarras) {
 			Producto producto = this.iProductoRepository.buscarProducto(codigo);
 			DetalleFactura detalleFactura = new DetalleFactura();

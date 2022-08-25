@@ -75,7 +75,7 @@ public class ProyectoU3PsApplication implements CommandLineRunner {
 
 		//this.iCompraService.realizarVenta("172415768", "1", listacodigoBarra);
 		
-		
+		this.iCompraService.realizarCompra("172415768", "1", listacodigoBarra);
 
 	}
 
