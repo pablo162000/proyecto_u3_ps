@@ -1,5 +1,8 @@
 package com.uce.edu.demo.service.funcional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import org.apache.log4j.Logger;
 
 public class MainInterfacesFuncionales {
@@ -13,87 +16,87 @@ public class MainInterfacesFuncionales {
 
 		// SUPPLIER
 
-		// Clases
+		// Clase
+		IAutomovilSupplier<BigDecimal> clsupplier = new AutomovilSupplierImpl();
+		LOG.info("Supplier clase:" + clsupplier.getPrecio());
+		// IMPLEMENTACION LAMBDA
 
-		IPersonaSupplier<String> supplier = new PersonaSupplierImpl();
-		LOG.info("Supplier Clase: " + supplier.getNombre());
+		IAutomovilSupplier<BigDecimal> supplier = () -> new BigDecimal(30000);
+		LOG.info("Supplier Lambda: " + supplier.getPrecio());
 
-		IPersonaSupplier<String> supplierTE = new PersonaSupplierTEImpl();
-		LOG.info("Supplier Clase: " + supplierTE.getNombre());
+		// METODO HIGH ORDER
 
-		// Lambdas
-		IPersonaSupplier<String> supplierLambda = () -> "Edison2";
-		LOG.info("Supplier Lambdas: " + supplierLambda.getNombre());
-
-		IPersonaSupplier<String> supplierLambdaTE = () -> "Daniel TE2";
-		LOG.info("Supplier Lambdas: " + supplierLambdaTE.getNombre());
-
-		// Metodos High Order
-		String valorHO = metodosHO.consumirSupplier(() -> "Hola Mundo");
-		LOG.info("HO Supplier " + valorHO);
-
-		String valorHO1 = metodosHO.consumirSupplier(() -> {
-			String valorConsultado = "1725685";
-			return valorConsultado;
-		});
-		LOG.info("HO Supplier " + valorHO1);
+		BigDecimal precio = metodosHO.consumirAutomovilSupplier(supplier);
+		LOG.info("HO Supplier " + precio);
 
 		// CONSUMER
-		// Clases
 
-		IPersonaConsumer<String> consumerClase = new PersonaConsumerImpl();
-		consumerClase.accept("Prueba Consumer");
-		// Lambdas
+		// Clase
+		IAutomovilConsumer<String> clconsumer = new AutomovilConsumerImpl();
+		LOG.info("Consumer clase:");
+		clconsumer.imprimirMarca("TOYOTA");
+		// IMPLEMENTACION LAMBDA
 
-		IPersonaConsumer<String> consumerLambda = cadena -> System.out.println(cadena);
-		consumerLambda.accept("Prueba Consumer Lambda");
-		// Metodos High Order
+		IAutomovilConsumer<String> consumer = cadena -> System.out.println(cadena);
+		LOG.info("Consumer Lambda");
 
-		metodosHO.consumirConsumer(valor -> System.out.println(valor), 2);
+		consumer.imprimirMarca("Consumer Lambda: " + "TOYOTA");
+		// METODO HIGH ORDER
+		LOG.info("HO Consumer");
+
+		metodosHO.consumirAutomovilConsumer(consumer, "HYUNDAI");
 
 		// PREDICATE
-		// Clases
-		// Lambdas
+		// Clase
+		IAutomovilPredicate<String> clpredicate = new AutomovilPredicateImpl();
 
-		IPersonaPredicate<String> predicateLambda = cadena -> cadena.contains("Z");
-		LOG.info("Predicate Lambdas:" + predicateLambda.evaluar("Edison"));
-		
-		//Metodos High ORDER
-		
-		boolean respuesta = metodosHO.consumirPredicate(cadena -> cadena.contains("Z"), "EdiZon");
-		LOG.info("HO Predicate " + respuesta);
+		LOG.info("Predicate clase: " + clpredicate.evaluarSeguro("asegurado"));
+		// IMPLEMENTACION LAMBDA
+		IAutomovilPredicate<String> predicate = cad -> cad.equals("asegurado");
+
+		LOG.info("Predicate Lambda: " + predicate.evaluarSeguro("asegurado"));
+		// METODO HIGH ORDER
+		LOG.info("HO Predicate");
+
+		LOG.info(metodosHO.consumirAutomovilPredicate(predicate, "asegurado"));
 
 		// FUNCTION
-		// Clases
-		// Lambdas
 
-		IPersonaFunction<Integer, String> funtionLambda = cadena -> {
+		// Clase
 
-			Integer valor = Integer.parseInt(cadena);
-			Integer valorFinal = valor - 2;
+		IAutomovilFunction<String, BigDecimal> clfunction = new AutomovilFunction();
+		LOG.info("Function clase: " + clfunction.determinarTipo(precio));
 
-			return valorFinal;
-		};
-		LOG.info("Function Lambdas:" + funtionLambda.aplicar("7"));
-		
-		//Metodos High Order
-		
-		String valorFinalHO= metodosHO.consumirFunction(valor -> {
-			String retorn = valor.toString() +"A";
-			return retorn;
-		}, 1);
-		LOG.info("HO Function: " + valorFinalHO);
+		// IMPLEMENTACION LAMBDA
 
-		
-
-		// UNARY OPERATOR (FUNCTION)
-
-		IPersonaUnaryOperator<String> unaryLambda = cade -> {
-			String valorFinal = cade.concat("sufijo");
-			return valorFinal;
+		IAutomovilFunction<String, BigDecimal> function = p -> {
+			String tipo = "";
+			if (p.compareTo(new BigDecimal(20000)) > 0) {
+				tipo = "Pesado";
+			} else {
+				tipo = "Liviano";
+			}
+			return tipo;
 		};
 
-		LOG.info("UnaryOperator Lambdas:" + unaryLambda.appy("Daniel"));
+		LOG.info("Function Lambda:  " + function.determinarTipo(precio));
+		// METODO HIGH ORDER
+		LOG.info("HO Function");
+
+		LOG.info(metodosHO.consumirAutomovilFunction(function, precio));
+
+		// UNARYOPERATOR
+		// Clase
+		IAutomovilUnaryOperator<BigDecimal> clUnaryOperator = new AutomovilUnaryOperator();
+		LOG.info("UnaryOperator clase: " + clUnaryOperator.sumarImpuesto(precio));
+		// IMPLEMENTACION LAMBDA
+
+		IAutomovilUnaryOperator<BigDecimal> unaryoperator = b -> b.add(b.multiply(new BigDecimal(0.2))).setScale(2,
+				RoundingMode.valueOf(0));
+		LOG.info("UnaryOperator Lambda: " + unaryoperator.sumarImpuesto(precio));
+		// METODO HIGH ORDER
+		LOG.info("HO UnaryOperator");
+		LOG.info(metodosHO.consumirAutomovilUnaryOperator(unaryoperator, precio));
 
 	}
 

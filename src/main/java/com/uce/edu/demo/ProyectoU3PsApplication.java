@@ -44,38 +44,7 @@ public class ProyectoU3PsApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
 
-//		Producto producto = new Producto();
-//		producto.setNombre("Mantequilla");
-//		producto.setPrecio(new BigDecimal(5));
-//		producto.setStock(30);
-//		producto.setCodigoBarras("ududsni47");
-//	
-//		this.iProductoService.insertarProducto(producto);
-//		
 
-		Ciudadano ciudadano = new Ciudadano();
-		ciudadano.setApellido("Suntaxi");
-		ciudadano.setNombre("Pablo");
-		ciudadano.setCedula("172415768");
-		Cliente cliente = new Cliente();
-		cliente.setCiudadano(ciudadano);
-		cliente.setNumeroTarjeta("18182828");
-		ciudadano.setCliente(cliente);
-		
-		//this.iCiudadanoService.insertar(ciudadano);
-		
-		//this.iProductoRepository.buscarProducto("ududsni47");
-		
-		
-		
-		List<String> listacodigoBarra= new ArrayList<>();
-		listacodigoBarra.add("oss87ds48d");
-		listacodigoBarra.add("ududsni47");
-		
-
-		//this.iCompraService.realizarVenta("172415768", "1", listacodigoBarra);
-		
-		this.iCompraService.realizarCompra("172415768", "1", listacodigoBarra);
 
 	}
 
