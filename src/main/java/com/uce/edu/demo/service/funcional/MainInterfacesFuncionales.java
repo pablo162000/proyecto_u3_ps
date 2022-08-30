@@ -1,13 +1,30 @@
 package com.uce.edu.demo.service.funcional;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
 
 public class MainInterfacesFuncionales {
 
 	private static Logger LOG = Logger.getLogger(MainInterfacesFuncionales.class);
+
+	public static boolean prueba(Integer numero) {
+		return numero >= 3;
+	}
+
+	public static void imprimir(String cadena) {
+		LOG.info("Impresion: "+ cadena);
+
+	}
+	
+	public static void guardar() {
+		
+	}
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -16,87 +33,124 @@ public class MainInterfacesFuncionales {
 
 		// SUPPLIER
 
-		// Clase
-		IAutomovilSupplier<BigDecimal> clsupplier = new AutomovilSupplierImpl();
-		LOG.info("Supplier clase:" + clsupplier.getPrecio());
-		// IMPLEMENTACION LAMBDA
+		// Clases
 
-		IAutomovilSupplier<BigDecimal> supplier = () -> new BigDecimal(30000);
-		LOG.info("Supplier Lambda: " + supplier.getPrecio());
+		IPersonaSupplier<String> supplier = new PersonaSupplierImpl();
+		LOG.info("Supplier Clase: " + supplier.getNombre());
 
-		// METODO HIGH ORDER
+		IPersonaSupplier<String> supplierTE = new PersonaSupplierTEImpl();
+		LOG.info("Supplier Clase: " + supplierTE.getNombre());
 
-		BigDecimal precio = metodosHO.consumirAutomovilSupplier(supplier);
-		LOG.info("HO Supplier " + precio);
+		// Lambdas
+		IPersonaSupplier<String> supplierLambda = () -> "Edison2";
+		LOG.info("Supplier Lambdas: " + supplierLambda.getNombre());
+
+		IPersonaSupplier<String> supplierLambdaTE = () -> "Daniel TE2";
+		LOG.info("Supplier Lambdas: " + supplierLambdaTE.getNombre());
+
+		// Metodos High Order
+		String valorHO = metodosHO.consumirSupplier(() -> "Hola Mundo");
+		LOG.info("HO Supplier " + valorHO);
+
+		String valorHO1 = metodosHO.consumirSupplier(() -> {
+			String valorConsultado = "1725685";
+			return valorConsultado;
+		});
+		LOG.info("HO Supplier " + valorHO1);
+		// JAVA
+		// Supplier
+		LOG.info("JAVA Supplier");
+		Stream<String> test = Stream.generate(() -> "Pablo 3").limit(7);
+		test.forEach(cadena -> System.out.println(cadena));
 
 		// CONSUMER
+		// Clases
 
-		// Clase
-		IAutomovilConsumer<String> clconsumer = new AutomovilConsumerImpl();
-		LOG.info("Consumer clase:");
-		clconsumer.imprimirMarca("TOYOTA");
-		// IMPLEMENTACION LAMBDA
+		IPersonaConsumer<String> consumerClase = new PersonaConsumerImpl();
+		consumerClase.accept("Prueba Consumer");
+		// Lambdas
 
-		IAutomovilConsumer<String> consumer = cadena -> System.out.println(cadena);
-		LOG.info("Consumer Lambda");
+		IPersonaConsumer<String> consumerLambda = cadena -> System.out.println(cadena);
+		consumerLambda.accept("Prueba Consumer Lambda");
+		// Metodos High Order
 
-		consumer.imprimirMarca("Consumer Lambda: " + "TOYOTA");
-		// METODO HIGH ORDER
-		LOG.info("HO Consumer");
+		metodosHO.consumirConsumer(valor -> System.out.println(valor), 2);
 
-		metodosHO.consumirAutomovilConsumer(consumer, "HYUNDAI");
+		// JAVA
+		LOG.info("JAVA consumer");
+		List<Integer> listaNumeros = Arrays.asList(1, 2, 3, 4, 5);
 
+		listaNumeros.forEach(numero -> System.out.println(numero));
+		// listaNumeros.str
 		// PREDICATE
-		// Clase
-		IAutomovilPredicate<String> clpredicate = new AutomovilPredicateImpl();
+		// Clases
+		// Lambdas
 
-		LOG.info("Predicate clase: " + clpredicate.evaluarSeguro("asegurado"));
-		// IMPLEMENTACION LAMBDA
-		IAutomovilPredicate<String> predicate = cad -> cad.equals("asegurado");
+		IPersonaPredicate<String> predicateLambda = cadena -> cadena.contains("Z");
+		LOG.info("Predicate Lambdas:" + predicateLambda.evaluar("Edison"));
 
-		LOG.info("Predicate Lambda: " + predicate.evaluarSeguro("asegurado"));
-		// METODO HIGH ORDER
-		LOG.info("HO Predicate");
+		// Metodos High ORDER
 
-		LOG.info(metodosHO.consumirAutomovilPredicate(predicate, "asegurado"));
+		boolean respuesta = metodosHO.consumirPredicate(cadena -> cadena.contains("Z"), "EdiZon");
+		LOG.info("HO Predicate " + respuesta);
 
+		// JAVA
+		LOG.info("JAVA Predicate");
+
+		Stream<Integer> nuevalista = listaNumeros.stream().filter(numero ->prueba(numero));
+		nuevalista.forEach(numero -> System.out.println(numero));
 		// FUNCTION
+		// Clases
+		// Lambdas
 
-		// Clase
+		IPersonaFunction<Integer, String> funtionLambda = cadena -> {
 
-		IAutomovilFunction<String, BigDecimal> clfunction = new AutomovilFunction();
-		LOG.info("Function clase: " + clfunction.determinarTipo(precio));
+			Integer valor = Integer.parseInt(cadena);
+			Integer valorFinal = valor - 2;
 
-		// IMPLEMENTACION LAMBDA
+			return valorFinal;
+		};
+		LOG.info("Function Lambdas:" + funtionLambda.aplicar("7"));
 
-		IAutomovilFunction<String, BigDecimal> function = p -> {
-			String tipo = "";
-			if (p.compareTo(new BigDecimal(20000)) > 0) {
-				tipo = "Pesado";
-			} else {
-				tipo = "Liviano";
-			}
-			return tipo;
+		// Metodos High Order
+
+		String valorFinalHO = metodosHO.consumirFunction(valor -> {
+			String retorn = valor.toString() + "A";
+			return retorn;
+		}, 1);
+		LOG.info("HO Function: " + valorFinalHO);
+
+		// JAVA
+		LOG.info("JAVA Function");
+		// Conversiones/cast
+
+		Stream<String> listaCambiada = listaNumeros.stream().map(numeroLista -> {
+			Integer valor = numeroLista + 1;
+			String cadena = "num: " + valor.toString();
+			return cadena;
+		});
+		//Declarativa
+		listaCambiada.forEach(valor -> imprimir(valor));
+		
+//		List<String> lista1 =  new ArrayList<>();
+//		Map<String, String> map1 = new HashMap<String, String>();
+		
+		//Stream: implementa sobre colecciones programacion funcional
+		//imperativa: paso a paso
+//		
+//		for(String valor:) {
+//			imprimir(valor);
+//		}
+
+		// UNARY OPERATOR (FUNCTION)
+
+		IPersonaUnaryOperator<String> unaryLambda = cade -> {
+			String valorFinal = cade.concat("sufijo");
+			return valorFinal;
 		};
 
-		LOG.info("Function Lambda:  " + function.determinarTipo(precio));
-		// METODO HIGH ORDER
-		LOG.info("HO Function");
-
-		LOG.info(metodosHO.consumirAutomovilFunction(function, precio));
-
-		// UNARYOPERATOR
-		// Clase
-		IAutomovilUnaryOperator<BigDecimal> clUnaryOperator = new AutomovilUnaryOperator();
-		LOG.info("UnaryOperator clase: " + clUnaryOperator.sumarImpuesto(precio));
-		// IMPLEMENTACION LAMBDA
-
-		IAutomovilUnaryOperator<BigDecimal> unaryoperator = b -> b.add(b.multiply(new BigDecimal(0.2))).setScale(2,
-				RoundingMode.valueOf(0));
-		LOG.info("UnaryOperator Lambda: " + unaryoperator.sumarImpuesto(precio));
-		// METODO HIGH ORDER
-		LOG.info("HO UnaryOperator");
-		LOG.info(metodosHO.consumirAutomovilUnaryOperator(unaryoperator, precio));
+		LOG.info("UnaryOperator Lambdas:" + unaryLambda.appy("Daniel"));
+		// JAVA
 
 	}
 
